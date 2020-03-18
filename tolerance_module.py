@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
 # tolerance study
-class Insertion:
+class InsertionClass:
     '''
     checkCollision
     sort
@@ -97,7 +97,7 @@ class Insertion:
         if np.any(dy)==None:
             dy = np.zeros_like(self.y)
         Theta = np.linspace(-np.pi, np.pi, 1000) # (h,)
-        phi = np.linspace(-np.pi, np.pi, 100) # (v,)
+        phi = np.linspace(-np.pi, np.pi, 500) # (v,)
         xp = dx + self.x
         yp = dy + self.y
         xh = self.x
@@ -143,9 +143,17 @@ class Insertion:
         ax.set_xlabel('dx')
         ax.set_ylabel('dy')
         ax.set_zlabel('theta')
+        ax.set_xlim3d(-0.3, 0.3)
+        ax.set_ylim3d(-0.3,0.3)
+        ax.set_zlim3d(-0.025,0.025)
         ax.set_title(name)
+        # for label in ax.get_xaxis().get_ticklabels()[::3]:
+        #     label.set_visible(False)
+        # for label in ax.get_yaxis().get_ticklabels()[::3]:
+        #     label.set_visible(False)
         plt.show()
         pass
+    
     
     def double_plot(self, dx, dy, name='Name'):
         '''
@@ -375,40 +383,3 @@ class Insertion:
             ax.plot(c1,c2,linewidth=1,label=i)
             ax.legend()
         pass
-    
-if __name__ == '__main__':   
-    # Configuration Unit:mm
-    com0 = {'name':'kf',
-            'x':np.array([2.5*i for i in np.arange(8)]),
-            'y':np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]),
-            'dx':np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]),
-            'dy':np.array([0.0, 0.0, 0.0, 0.1, 0.0, 0.0, 0.0, 0.0]),
-            'Rh':0.7,
-            'Rp':0.4}# Rp must less than Rh
-    
-    com1 = {'name':'wj',
-            'x':np.array([-2.5,0.0,2.5,-2.5,0.0,2.5]),
-            'y':np.array([0.0,0.0,0.0,2.5,2.5,2.5]),
-            'dx':np.array([0.0,0.0,0.0,0.0,0.0,0.0]),
-            'dy':np.array([0.0,0.0,0.0,0.0,0.0,0.0]),
-            'Rh':0.7,
-            'Rp':0.4}# Rp must less than Rh
-    
-    com2 = {'name':'db',
-            'x':np.array([1.0,-1.0,0.0]),
-            'y':np.array([0.0,0.0,1.0]),
-            'Rh':3.5,
-            'Rp':3.0}# Rp must less than Rh
-    
-    com3 = {'name':'hx',
-            'x':np.array([1.0,-1.0,0.0]),
-            'y':np.array([0.0,0.0,1.0]),
-            'Rh':3.5,
-            'Rp':3.0}# Rp must less than Rh
-    com = [com0,com1,com2,com3]
-    
-    for item in com[1:2]:
-        insertion = Insertion(item['x'], item['y'], item['Rh'], item['Rp'])
-        # insertion.double_plot(item['dx'], item['dy'], name=item['name'])
-        insertion.difference_plot(item['dx'], item['dy'], name=item['name'])
-        # insertion.center_plot2D(item['dx'], item['dy'])
