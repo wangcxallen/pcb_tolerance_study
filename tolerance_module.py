@@ -96,7 +96,7 @@ class InsertionClass:
             dx = np.zeros_like(self.x)
         if np.any(dy)==None:
             dy = np.zeros_like(self.y)
-        Theta = np.linspace(-np.pi, np.pi, 1000) # (h,)
+        Theta = np.linspace(-np.pi, np.pi, 101) # (h,)
         phi = np.linspace(-np.pi, np.pi, 500) # (v,)
         xp = dx + self.x
         yp = dy + self.y
@@ -112,6 +112,7 @@ class InsertionClass:
                 y = xp[i]*np.sin(Theta) + yp[i]*np.cos(Theta) - yh[i]
                 ax.plot(x,y,Theta,c=(0.0,0.0,1.0),linewidth=1)
         for theta in Theta:
+            flag = False
             pts = np.array([])
             # Obtain all surface points
             for i in np.arange(self.x.shape[0]):
@@ -129,23 +130,24 @@ class InsertionClass:
                     Xf = X[idx]
                     Yf = Y[idx]
                     Zf = Z[idx]
-                    if i==0:
+                    if flag==False:
                         pts = np.stack( [Xf,Yf,Zf], axis=1)
+                        flag = True
                     else:
                         pts = np.concatenate((pts,np.stack( [Xf,Yf,Zf], axis=1)) ,axis=0)
                         
             if pts.size!=0:
                 idx = self.sort(pts[:,1], pts[:,0])
-                thetamin = -0.03
-                thetamax = 0.03
+                thetamin = -0.3
+                thetamax = 0.3
                 ax.plot(pts[idx,0], pts[idx,1], pts[idx,2], c=((theta-thetamin)/(thetamax-thetamin), (thetamax-theta)/(thetamax-thetamin), 0.2), linewidth=2)
         # Plot
         ax.set_xlabel('dx')
         ax.set_ylabel('dy')
         ax.set_zlabel('theta')
-        ax.set_xlim3d(-0.3, 0.3)
-        ax.set_ylim3d(-0.3,0.3)
-        ax.set_zlim3d(-0.025,0.025)
+        ax.set_xlim3d(-0.5, 0.5)
+        ax.set_ylim3d(-0.5,0.5)
+        ax.set_zlim3d(-0.3,0.3)
         ax.set_title(name)
         # for label in ax.get_xaxis().get_ticklabels()[::3]:
         #     label.set_visible(False)
