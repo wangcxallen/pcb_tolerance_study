@@ -6,9 +6,8 @@ This script is used to train the autoencoder using the data generated from gener
 # Libraries
 import tensorflow
 import keras
-import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 from keras.datasets import mnist
 from keras.models import Model, Sequential
 from keras.layers import Dense, Conv2D, Dropout, BatchNormalization, Input, Reshape, Flatten, Deconvolution2D, Conv2DTranspose, MaxPooling2D, UpSampling2D
