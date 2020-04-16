@@ -96,7 +96,7 @@ class InsertionClass:
             dx = np.zeros_like(self.x)
         if np.any(dy)==None:
             dy = np.zeros_like(self.y)
-        Theta = np.linspace(-np.pi, np.pi, 101) # (h,)
+        Theta = np.linspace(-np.pi, np.pi, 500) # (h,)
         phi = np.linspace(-np.pi, np.pi, 500) # (v,)
         xp = dx + self.x
         yp = dy + self.y
@@ -147,7 +147,7 @@ class InsertionClass:
         ax.set_zlabel('theta')
         ax.set_xlim3d(-0.5, 0.5)
         ax.set_ylim3d(-0.5,0.5)
-        ax.set_zlim3d(-0.3,0.3)
+        ax.set_zlim3d(-0.15,0.15)
         ax.set_title(name)
         # for label in ax.get_xaxis().get_ticklabels()[::3]:
         #     label.set_visible(False)

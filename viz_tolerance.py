@@ -39,31 +39,43 @@ if __name__ == '__main__':
             'Rp':0.25})# Rp must less than Rh
     
     # 1
+    num_pin = 2
+    com.append({'name':'num_pin x 1 - Socket',
+            'x':np.array([2.5*i for i in np.arange(num_pin)]),
+            'y':np.zeros(num_pin),
+            'dx':np.zeros(num_pin),
+            'dy':np.zeros(num_pin),
+            'Rh':0.495,
+            'Rp':0.25})# Rp must less than Rh
+    
+    # 2
     com.append( {'name':'MT-1',
             'x':np.array([4.7*i for i in np.arange(3)]*2),
             'y':np.array([0]*3 + [4.8]*3),
             'Rh':1.2,
             'Rp':1.077} )# This is approximated. Rp must less than Rh
-    # 2
+    
+    # 3
     com.append( {'name':'SR-1',
             'x':np.array([2.54*i for i in np.arange(3)] + [0.0, 5.08]),
             'y':np.array([0.0]*3 + [5.1]*2),
             'Rh':0.55,
             'Rp':0.49} )# This is approximated. Rp must less than Rh
-    # 3
+    
+    # 4
     com.append( {'name':'RB-1-ZZ',
             'x':np.array([0.0, 15.55]),
             'y':np.array([0.0, 0.0]),
             'Rh':0.8,
             'Rp':0.6} )# This is approximated. Rp must less than Rh
     
-    # 4
+    # 5
     com.append( {'name':'1-pin',
             'x':np.array([2.5,0]),
             'y':np.array([0,0]),
             'Rh':0.495,
             'Rp':0.25} )# This is approximated. Rp must less than Rh
     
-    for item in com[4:5]:
+    for item in com[0:1]:
         insertion = ts.InsertionClass(item['x'], item['y'], item['Rh'], item['Rp'])
         insertion.single_plot(name=item['name'])
