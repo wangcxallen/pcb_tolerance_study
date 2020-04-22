@@ -20,11 +20,23 @@ def main():
     ae = tol_encoder()
     ae.train(5000)
     ae.save_weights('ae_weights')
+    
+    # Check training results
     # ae.load_weight('ae_weights')
-    prediction = ae.ae.predict(ae.train_data[0:1,:,:,0:]).reshape(28,28)
-    ax = plt.axes(projection='3d')
-    [X,Y] = np.meshgrid(np.arange(28),np.arange(28))
-    ax.plot_surface(X,Y,prediction,cmap='viridis', edgecolor='none')
+    # raw_data = ae.train_data[60:61,:,:,0:]
+    # prediction = ae.ae.predict(raw_data).reshape(28,28)
+    
+    # fig = plt.figure()
+    # ax = plt.axes(projection='3d')
+    # [X,Y] = np.meshgrid(np.arange(28),np.arange(28))
+    # ax.plot_surface(X,Y,prediction,cmap='viridis', edgecolor='none')
+    # plt.show()
+    
+    # fig = plt.figure()
+    # ax = plt.axes(projection='3d')
+    # [X,Y] = np.meshgrid(np.arange(28),np.arange(28))
+    # ax.plot_surface(X,Y,raw_data.reshape(28,28),cmap='viridis', edgecolor='none')
+    # plt.show()
     pass
 
 class tol_encoder:
@@ -79,6 +91,7 @@ class tol_encoder:
     def train(self,num_epoch,batch_size=50):
         self.ae.fit(self.train_data, self.train_data, batch_size=batch_size, epochs=num_epoch)
     
+
 # Main
 if __name__ == '__main__':   
     main()
