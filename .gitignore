@@ -1,2 +1,4 @@
 
-__pycache__/tolerance_module.cpython-37.pyc
+__pycache__/*
+*.pickle
+*.npy
