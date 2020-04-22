@@ -18,7 +18,7 @@ import pickle
 # Utilities
 def main():
     ae = tol_encoder()
-    ae.train(5000)
+    ae.train(2000)
     ae.save_weights('ae_weights')
     
     # Check training results
@@ -87,9 +87,13 @@ class tol_encoder:
         filename = filename + '.pickle'
         with open(filename, 'wb') as handle:
             pickle.dump(weights, handle, protocol=pickle.HIGHEST_PROTOCOL)
+        pass
     
-    def train(self,num_epoch,batch_size=50):
-        self.ae.fit(self.train_data, self.train_data, batch_size=batch_size, epochs=num_epoch)
+    def train(self,num_epoch,batch_size=20):
+        history = self.ae.fit(self.train_data, self.train_data, validation_data=(self.test_data,self.test_data), batch_size=batch_size, epochs=num_epoch)
+        with open('history.pickle', 'wb') as handle:
+            pickle.dump(history.history, handle, protocol=pickle.HIGHEST_PROTOCOL)
+        pass
     
 
 # Main
