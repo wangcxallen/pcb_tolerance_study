@@ -38,7 +38,7 @@ class tol_encoder:
         e = MaxPooling2D((2, 2))(e)
         e = Conv2D(64, (3, 3), activation='relu')(e)
         l = Flatten()(e)
-        l = Dense(25, activation='softmax')(l)
+        l = Dense(10, activation='softmax')(l)
         
         #DECODER
         l = Dense(49, activation='softmax')(l)
