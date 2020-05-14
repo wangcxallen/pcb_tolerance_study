@@ -14,8 +14,8 @@ def main():
     test_data = 'data/' + 'tol_data_50.npy'
     ae = tol_encoder(train_data, test_data)
     
-    viz_history('history_25_2000')
-    viz_prediction(ae,'ae_25_2000')
+    # viz_history('history_10_5000')
+    viz_prediction(ae,'ae_10_5000')
     pass
 
 def viz_history(filename):

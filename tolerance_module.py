@@ -239,10 +239,12 @@ class InsertionClass:
         dx, dy: ndarray, defection of every pin
         '''
         # Configuration
-        Theta = np.linspace(-np.pi, np.pi, 1000) # (h,)
+        Theta = np.linspace(-np.pi, np.pi, 100) # (h,)
         phi = np.linspace(-np.pi, np.pi, 100) # (v,)
-        xp = dx + self.x
-        yp = dy + self.y
+        xp = self.x
+        xp[0] = xp[0] + dx
+        yp = self.y
+        yp[0] = yp[0] + dy
         # Obtain feasible surface points
         # Start figure
         fig = plt.figure()
@@ -363,8 +365,8 @@ class InsertionClass:
             #     ax.plot(pts_new[idx,0], pts_new[idx,1], pts_new[idx,2], c=(1.0,0,0), linewidth=2)
         
         # Plot configuration
-        ax.set_xlabel('dx')
-        ax.set_ylabel('dy')
+        ax.set_xlabel('delta_x')
+        ax.set_ylabel('delta_y')
         ax.set_zlabel('theta')
         ax.set_title(name)
         plt.show()

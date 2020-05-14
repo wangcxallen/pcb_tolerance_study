@@ -8,34 +8,26 @@ Note:
 '''
 # Libraries
 import numpy as np
-from mpl_toolkits import mplot3d # mlot3d and plt are for data testing
+from mpl_toolkits import mplot3d
 import matplotlib.pyplot as plt
-
-# global read only variables
-DISTANCE_COL = 2.5 # No randomization introduced, distance in x direction
-DISTANCE_ROW = 2.5 # No randomization introduced, distance in y direction
-ROW_MAX = 2
-ROW_MIN = 1
-COL_MAX = 20
-COL_MIN = 2
-
-RADIUS_HOLE = 0.495
-RADIUS_PIN = 0.25
-RADIUS_TOL_RANGE = 0.1 # Half range of randomized radius tolerance, radius tolerance = Rh-Rp
-
 
 # Utilities
 def main():
-    print('Start');
-    get_data = get_tolerance_data('test_data',1)
-    get_data.get_data_batch()
-    
-    test_data = np.load('test_data.npy')[0]
+    # print('Start');
+    get_data = get_tolerance_data('1_3_up',1)
+    # test_data = get_data.get_data_batch()
+    # print(test_data.shape)
+    Z_up = np.load('1_3_up.npy')
+    Z_down = np.load('1_3_down.npy')
     [X,Y] = np.meshgrid(get_data.delta_x,get_data.delta_y)
     fig = plt.figure()
     ax = plt.axes(projection='3d')
-    ax.plot_surface(X, Y, test_data,cmap='viridis', edgecolor='none')
-    ax.set_title('Surface plot')
+    ax.plot_surface(X, Y, Z_down[0,:,:],cmap='viridis_r', edgecolor='none')
+    ax.plot_surface(X, Y, Z_up[0,:,:],cmap='viridis', edgecolor='none')
+    ax.set_xlabel('delta_x')
+    ax.set_ylabel('delta_y')
+    ax.set_zlabel('theta')
+    ax.set_title('1*3 socket')
     plt.show()
     pass
     
@@ -45,6 +37,12 @@ class get_tolerance_data:
     '''
     def __init__(self, filename, num_data, resolution=28):
         '''
+        The data is now generated for nominal sockets from 2 to 20 single or double sets
+        the radius tolerance is now randomly chosed from a certain range
+        socket pin radius: 0.25
+        socket pin distance: 2.5
+        PCB board hole radius: 0.495
+        
         Input:
             filename: where to store the data
             num_data: how much data you want
@@ -54,11 +52,10 @@ class get_tolerance_data:
         self.filename = filename
         self.num_data = num_data
         self.res = resolution
-        self.d_row = DISTANCE_ROW
-        self.d_col = DISTANCE_COL
-        self.Rp = RADIUS_PIN
-        self.Rh = RADIUS_HOLE
-        self.tol_r = RADIUS_HOLE - RADIUS_PIN + RADIUS_TOL_RANGE # in order to include the most loose constrait
+        self.dp=2.5
+        self.Rp=0.25
+        self.Rh=0.495
+        self.tol_r = self.Rh - self.Rp
         self.delta_x = np.linspace(-self.tol_r, self.tol_r, self.res) # these are the check points along delta_x
         self.delta_y = np.linspace(-self.tol_r, self.tol_r, self.res)
         pass
@@ -68,18 +65,14 @@ class get_tolerance_data:
         generate 2d tolerance data and store them into filename.npz
         '''
         data = []
-        data_config = []
         for i_data in np.arange(self.num_data):
             print('Generating data: %d' % (100*i_data/self.num_data))
-            [tolerance, config] = self.get_2d_tolerance()
+            tolerance = self.get_2d_tolerance()
             data.append(tolerance)
-            data_config.append(config)
         
         data = np.array(data)
-        data_config = np.array(data_config)
         np.save(self.filename,data)
-        np.save(self.filename+'_config',data_config)
-        pass
+        return data
     
     def get_2d_tolerance(self, res_theta=1000):
         '''
@@ -91,26 +84,26 @@ class get_tolerance_data:
             tolerance_2d: array, (m, m), where m is the resolution along x or y dimension in tolerance space
         '''
         # Configure pin distribution and radius tolerance randomly and generate theta axis test points
-        num_row = np.random.randint(1,3)
-        num_col = np.random.randint(2,21)
-        xp_p_frame = self.d_col * np.array( num_row * [i for i in np.arange(num_col)] )
-        yp_p_frame = self.d_row * np.multiply.outer(np.arange(num_row),np.ones(num_col)).reshape(-1,)
+        num_row = 1 #np.random.randint(1,3)
+        num_col = 3 #np.random.randint(2,21)
+        xp_p_frame = 1.25 * np.array( num_row * [i for i in np.arange(num_col)] )
+        yp_p_frame = 2.5 * np.multiply.outer(np.arange(num_row),np.ones(num_col)).reshape(-1,)
         x_center = np.average(xp_p_frame)
         y_center = np.average(yp_p_frame)
         xp_p_frame = xp_p_frame - x_center
         yp_p_frame = yp_p_frame - y_center
-        theta = np.linspace(0,np.pi,res_theta)
+        theta = np.linspace(0,3.1415,res_theta) # for up
+        # theta = np.linspace(-3.1415,0,res_theta) # for down
         
-        self.tol_r = RADIUS_HOLE - RADIUS_PIN + RADIUS_TOL_RANGE*(np.random.random()*2-1)
+        self.tol_r = 0.24 # + 0.05*np.random.random()
         
         # Calculate tolerance 2d
         is_collision = self.check_collision(xp_p_frame,yp_p_frame,theta) # (m, m, n), data type: bool
+        # is_collision = np.flip(is_collision,axis=2) # for down
         tolerance_2d = np.argmax(is_collision,axis=2) # (m, m)
-        tolerance_2d = (tolerance_2d) * (np.pi/res_theta)
-        
-        # Record configuration
-        config = [num_row, num_col, self.tol_r, ]
-        return [tolerance_2d,config]
+        tolerance_2d =  (tolerance_2d) * (3.1415/res_theta) # for up
+        # tolerance_2d = - (tolerance_2d) * (3.1415/res_theta) # for down
+        return tolerance_2d
     
     def check_collision(self,x,y,theta,th=0.0000001):
         '''

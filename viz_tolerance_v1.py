@@ -41,7 +41,7 @@ if __name__ == '__main__':
     # 1
     num_pin = 2
     com.append({'name':'num_pin x 1 - Socket',
-            'x':np.array([2.5*i for i in np.arange(num_pin)]),
+            'x':np.array([2.5*i-1.25 for i in np.arange(num_pin)]),
             'y':np.zeros(num_pin),
             'dx':np.zeros(num_pin),
             'dy':np.zeros(num_pin),
@@ -76,6 +76,7 @@ if __name__ == '__main__':
             'Rh':0.495,
             'Rp':0.25} )# This is approximated. Rp must less than Rh
     
-    for item in com[0:1]:
+    for item in com[1:2]:
         insertion = ts.InsertionClass(item['x'], item['y'], item['Rh'], item['Rp'])
         insertion.single_plot(name=item['name'])
+        insertion.difference_plot(0,0.1,'socket')
