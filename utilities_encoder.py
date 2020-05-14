@@ -12,6 +12,7 @@ from keras.models import Model, Sequential
 from keras.layers import Dense, Conv2D, Dropout, BatchNormalization, Input, Reshape, Flatten, Deconvolution2D, Conv2DTranspose, MaxPooling2D, UpSampling2D
 from keras.layers.advanced_activations import LeakyReLU
 from keras.optimizers import adam
+from keras.callbacks import ModelCheckpoint
 import pickle
 
 # Utilites
@@ -67,17 +68,16 @@ class tol_encoder:
         pass
     
     def train(self, num_epoch,batch_size=20,filepath='weights-{epoch:02d}.hdf5'):   
-        model_callback = tf.keras.callbacks.ModelCheckpoint(filepath=filepath,
-                                                                       save_weights_only=True,
-                                                                       save_best_only=False,
-                                                                       save_freq="epoch")
+        model_callback = ModelCheckpoint(filepath=filepath,
+                                         save_weights_only=True,
+                                         save_best_only=False)
         
         history = self.ae.fit(self.train_data, 
                               self.train_data, 
                               validation_data=(self.test_data,self.test_data), 
                               batch_size=batch_size, 
-                              epochs=num_epoch
-                              ,callbacks=[model_callback])
+                              epochs=num_epoch,
+                              callbacks=[model_callback])
         with open('history.pickle', 'wb') as handle:
             pickle.dump(history.history, handle, protocol=pickle.HIGHEST_PROTOCOL)
         pass
