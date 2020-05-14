@@ -70,7 +70,7 @@ class get_tolerance_data:
         data = []
         data_config = []
         for i_data in np.arange(self.num_data):
-            print('Generating data: %d' % (100*i_data/self.num_data))
+            print('Generating data: %f %%' % (100*i_data/self.num_data))
             [tolerance, config] = self.get_2d_tolerance()
             data.append(tolerance)
             data_config.append(config)

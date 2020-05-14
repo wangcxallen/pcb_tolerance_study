@@ -4,7 +4,7 @@ Training utility: training class
 """
 
 # Libraries
-import tensorflow
+import tensorflow as tf
 import keras
 import numpy as np
 from keras.datasets import mnist
@@ -66,8 +66,18 @@ class tol_encoder:
             pickle.dump(weights, handle, protocol=pickle.HIGHEST_PROTOCOL)
         pass
     
-    def train(self, num_epoch,batch_size=20):        
-        history = self.ae.fit(self.train_data, self.train_data, validation_data=(self.test_data,self.test_data), batch_size=batch_size, epochs=num_epoch)
+    def train(self, num_epoch,batch_size=20,filepath='weights-{epoch:02d}.hdf5'):   
+        model_callback = tf.keras.callbacks.ModelCheckpoint(filepath=filepath,
+                                                                       save_weights_only=True,
+                                                                       save_best_only=False,
+                                                                       save_freq="epoch")
+        
+        history = self.ae.fit(self.train_data, 
+                              self.train_data, 
+                              validation_data=(self.test_data,self.test_data), 
+                              batch_size=batch_size, 
+                              epochs=num_epoch
+                              ,callbacks=[model_callback])
         with open('history.pickle', 'wb') as handle:
             pickle.dump(history.history, handle, protocol=pickle.HIGHEST_PROTOCOL)
         pass
