@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 '''
-This is the script to generate data that will be used by autoencoder.
+The script is used to visualize the generated tolerance from gen_tol.py. It needs a lot of hand specified parameters inside both this script and gen_tol.py. Please be careful.
+
 Note:
     1. First thing that the autoencoder should know is to disgard frame shift. 
         Different frame may cause the tolerance to seem to be diifference but 

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 '''
-This is the script to generate data that will be used by autoencoder.
+This is the script to generate data that will be used by viz_tol_v2.py
+
 Note:
     1. First thing that the autoencoder should know is to disgard frame shift. 
         Different frame may cause the tolerance to seem to be diifference but 
@@ -26,7 +27,7 @@ RADIUS_TOL_RANGE = 0.1 # Half range of randomized radius tolerance, radius toler
 
 # Utilities
 def main():
-    print('Start');
+    print('Start')
     get_data = get_tolerance_data('test_data',1)
     get_data.get_data_batch()
     

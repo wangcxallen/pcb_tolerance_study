@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 """
 Visualization of Tolerance Model
-Main function
 
-@author: Wang Chenxi
+This script functions as a main function to selectively call functions in utilities_viz_tol_v1. This version 1.0 visualization plot tolerance model through contours while version 2.0 uses surface plot. It is recommended to use version 2.0.
 """
 
 # Libraries
 import numpy as np
-import tolerance_module as ts
+import utilities_viz_tol_v1 as ts
 
 if __name__ == '__main__':   
     # Configuration Unit:mm

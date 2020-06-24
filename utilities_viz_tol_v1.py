@@ -1,5 +1,6 @@
-# -*- coding: utf-8 -*-
-# -*- coding: utf-8 -*-
+'''
+This script is used as a library for visualization to study tolerance of different sockets. It provides different method to study tolerance through contour plot.
+'''
 
 # Libraries
 import numpy as np
